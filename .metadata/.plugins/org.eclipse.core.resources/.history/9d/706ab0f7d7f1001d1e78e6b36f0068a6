@@ -1,0 +1,47 @@
+package com.giovannagrangeiro.projetocp;
+
+
+import java.util.Arrays;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.giovannagrangeiro.projetocp.domain.Contato;
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+
+import com.giovannagrangeiro.projetocp.repositories.PessoaRepository;
+
+@SpringBootApplication
+public class ProjetocpApplication implements CommandLineRunner {
+	
+	@Autowired
+	private PessoaRepository pessoaRepository;
+	
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProjetocpApplication.class, args);
+		 	
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		Pessoa p1 = new Pessoa(null, "Ana", "222546312258");
+		Pessoa p2 = new Pessoa(null, "Pedro", "45698523614");
+		
+		
+		Contato c1 = new Contato(null, "Paulo", "(44)997456321", "Paulo@gmail.com");
+		Contato c2 = new Contato(null, "Marcelo", "(44)998632547", "Marcelo@gmail.com");
+		
+		p1.getContatos().add(c2);
+		p1.getContatos().add(c1);
+
+		
+		pessoaRepository.saveAll(Arrays.asList(p1, p2));
+		
+		
+		
+	}
+
+}

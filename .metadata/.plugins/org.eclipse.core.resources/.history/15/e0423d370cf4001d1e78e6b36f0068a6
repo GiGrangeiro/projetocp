@@ -1,0 +1,129 @@
+package com.giovannagrangeiro.projetocp;
+
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
+
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+import com.giovannagrangeiro.projetocp.repositories.PessoaRepository;
+import com.giovannagrangeiro.projetocp.resource.PessoaResource;
+import com.giovannagrangeiro.projetocp.services.PessoaService;
+
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+public class PessoaResourceTeste {
+	
+		
+	@Mock
+	private PessoaService pessoaService;
+	
+	@MockBean
+	private PessoaRepository pessoaRepo;
+	
+	@InjectMocks
+	private PessoaResource pessoaResource;
+	
+	@Autowired
+	private MockMvc mockMvc;
+	
+	@Autowired
+	private ObjectMapper objectMapper;
+	
+	@BeforeEach
+	public void configurar(){
+		MockitoAnnotations.openMocks(this);
+		mockMvc = MockMvcBuilders.standaloneSetup(pessoaResource).build();
+	}
+	
+
+	
+	
+	@Test
+	public void testeBuscarPessoas() throws Exception { 
+		mockMvc.perform(get("/pessoas")).andExpect(status().isOk());
+		
+	}
+	
+	
+	@Test
+	public void criarPessoa() throws Exception{
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(1);
+		pessoa.setNome("João");
+		pessoa.setCpf("10584310994");
+		pessoa.setDataDeNascimento(LocalDate.of(2001, 11, 2));
+		
+		
+		mockMvc.perform(post("/pessoas")
+				.accept(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(pessoa)))
+				.andExpect(status().isCreated());
+			
+		
+		
+	
+	}
+	
+	@Test
+	public void testeEditarPessoa() throws Exception {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(1);
+		pessoa.setNome("Alice");
+		pessoa.setCpf("10584310994");
+		pessoa.setDataDeNascimento(LocalDate.of(2001, 11, 2));
+		
+		
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/pessoas/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"nome\":\"Alice\",\"cpf\":\"10584310994\",\"dataDeNascimento\":\"2001-11-02\"}"))
+				.andExpect(status().isOk());
+		
+	    
+		
+		
+	}
+	
+	@Test
+	public void testeApagarPessoa() throws Exception {
+		doNothing().when(pessoaService).apagarPessoa(1);
+		
+		mockMvc.perform(delete("/pessoas/1")).andExpect(status().isOk());
+		
+	
+		
+		
+	}
+	
+	
+
+}

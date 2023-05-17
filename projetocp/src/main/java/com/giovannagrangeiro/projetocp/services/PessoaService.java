@@ -1,0 +1,81 @@
+package com.giovannagrangeiro.projetocp.services;
+
+	
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import com.giovannagrangeiro.projetocp.domain.Contato;
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+import com.giovannagrangeiro.projetocp.repositories.PessoaRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
+@Service
+public class PessoaService {
+	
+	@Autowired
+	private PessoaRepository pessoaRepo;
+	
+	public Pessoa find(Integer id) {
+		Optional<Pessoa> obj = pessoaRepo.findById(id);
+		return obj.orElse(null);		
+	}
+	
+	
+	
+
+	public Page<Pessoa> getTodasPessoas(Pageable pageable){
+		return pessoaRepo.findAll(pageable);
+	}
+	
+	public Page<Pessoa> pesquisarPorNome(String nome, Pageable pageable){
+		return pessoaRepo.findByNomeContainingIgnoreCase(nome, pageable);
+	}
+ 
+	
+	public Pessoa salvarPessoa(Pessoa pessoa) {		
+		validarContato(pessoa);
+		pessoa.getContatos().forEach(Contato -> Contato.setPessoa(pessoa));
+		return pessoaRepo.save(pessoa);	
+	}
+	
+	public Pessoa editarPessoa(Integer id, Pessoa editarPessoa) {
+		Pessoa existePessoa = pessoaRepo.findById(id)
+		.orElseThrow(() -> new EntityNotFoundException("Pessoa não encontrada com o id: " + id));
+		
+		existePessoa.setNome(editarPessoa.getNome());
+		existePessoa.setCpf(editarPessoa.getCpf());
+		existePessoa.setDataDeNascimento(editarPessoa.getDataDeNascimento());
+		existePessoa.getContatos().clear();
+		
+		editarPessoa.getContatos().forEach(c -> {
+		
+		Contato contato = new Contato();
+		contato.setNome(c.getNome());
+				
+		existePessoa.addContato(contato);
+		});
+		
+		validarContato(existePessoa);
+		return pessoaRepo.save(existePessoa);
+	}
+	
+	public void apagarPessoa(Integer id) {
+		Pessoa pessoaExiste = pessoaRepo.findById(id)
+		.orElseThrow(() -> new EntityNotFoundException("Não existe pessoa com esse id: " + id)); 
+		pessoaRepo.delete(pessoaExiste);
+	}
+
+	public void validarContato(Pessoa pessoa) {
+		if(pessoa.getContatos().isEmpty()) {
+			throw new EntityNotFoundException("A pessoa deve ter pelo menos um contato");
+		}
+	}
+	
+	
+ 
+}

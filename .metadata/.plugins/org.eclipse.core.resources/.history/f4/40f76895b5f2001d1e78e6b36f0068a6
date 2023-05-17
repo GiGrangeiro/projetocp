@@ -1,0 +1,23 @@
+package com.giovannagrangeiro.projetocp.services;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.giovannagrangeiro.projetocp.domain.Contato;
+
+import com.giovannagrangeiro.projetocp.repositories.ContatoRepository;
+
+@Service
+public class ContatoService {
+	
+	@Autowired
+	private ContatoRepository contatoRepo;
+	
+	public Contato find(Integer id) {
+		Optional<Contato> obj = contatoRepo.findById(id);
+		return obj.orElse(null);
+		
+	}
+}

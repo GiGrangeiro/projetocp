@@ -1,0 +1,5 @@
+package com.giovannagrangeiro.projetocp.services.exception;
+
+public class ObjectNotFoundException {
+
+}

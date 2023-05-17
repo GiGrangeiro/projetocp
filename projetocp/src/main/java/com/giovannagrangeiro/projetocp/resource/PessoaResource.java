@@ -1,0 +1,97 @@
+package com.giovannagrangeiro.projetocp.resource;
+
+
+
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+import com.giovannagrangeiro.projetocp.dto.PessoaDTO;
+import com.giovannagrangeiro.projetocp.services.PessoaService;
+
+import jakarta.validation.Valid;
+
+
+@RestController
+@Validated
+@RequestMapping(value="/pessoas")
+public class PessoaResource {
+	
+	@Autowired
+	private PessoaService service;
+	
+	
+	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<PessoaDTO> find(@PathVariable Integer id) {
+		Pessoa obj = service.find(id);
+		return ResponseEntity.ok().body(obj.converterParaDTO());		
+	}
+	
+
+	
+	
+	
+   	@GetMapping
+    public ResponseEntity<Page<Pessoa>> getPessoa(
+    	@RequestParam(value = "página", defaultValue = "0") int pagina,
+	    @RequestParam(value = "tamanho", defaultValue = "10") int tamanho,
+	    @RequestParam(value = "nome", required = false) String nome
+	){
+	    Page<Pessoa> pessoaPage;
+	        
+	    if (nome != null) {
+	    	pessoaPage = service.pesquisarPorNome(nome, PageRequest.of(pagina, tamanho));
+	    }else {
+	            pessoaPage = service.getTodasPessoas(PageRequest.of(pagina, tamanho));
+	    }
+	        
+	        return ResponseEntity.ok(pessoaPage);
+	    }
+	
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<Pessoa> criarPessoa(@RequestBody @Valid Pessoa pessoa) {
+		Pessoa salvarPessoa = service.salvarPessoa(pessoa);
+		return ResponseEntity.status(HttpStatus.CREATED).body(salvarPessoa);
+	       
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Pessoa> alterarPessoa(@PathVariable Integer id, @Valid @RequestBody Pessoa alterarPessoa){
+		Pessoa editarPessoa = service.editarPessoa(id, alterarPessoa);
+		return ResponseEntity.ok(editarPessoa);
+	}
+	
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deletarPessoa(@PathVariable Integer id){
+		service.apagarPessoa(id);
+		return ResponseEntity.ok("Pessoa deletada com sucesso!");
+	}
+	
+	
+		
+	
+	
+	
+
+}

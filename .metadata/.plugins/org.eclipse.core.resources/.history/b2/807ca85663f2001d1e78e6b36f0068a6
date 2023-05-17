@@ -1,0 +1,32 @@
+package com.giovannagrangeiro.projetocp.services;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+import com.giovannagrangeiro.projetocp.repositories.PessoaRepository;
+
+@Service
+public class PessoaService {
+	
+	@Autowired
+	private PessoaRepository pessoaRepo;
+	
+	public Pessoa find(Integer id) {
+		Optional<Pessoa> obj = pessoaRepo.findById(id);
+		return obj.orElse(null);
+		
+	}
+	
+	public Pessoa find(PageRequest page) {
+		Optional<Pessoa> obj = pessoaRepo.findById(id);
+		return obj.orElse(null);
+		
+	}
+	
+
+}

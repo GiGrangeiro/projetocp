@@ -1,0 +1,89 @@
+package com.giovannagrangeiro.projetocp.resource;
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.annotation.MethodArgumentConversionNotSupportedException;
+
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+import com.giovannagrangeiro.projetocp.resource.exception.ErrorResponse;
+import com.giovannagrangeiro.projetocp.resource.exception.ResourceExceptionHandler;
+import com.giovannagrangeiro.projetocp.services.PessoaService;
+
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
+
+
+@RestController
+@Validated
+@RequestMapping(value="/pessoas")
+public class PessoaResource {
+	
+	@Autowired
+	private PessoaService service;
+	@Autowired
+	private ResourceExceptionHandler exception;
+	
+	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> find(@PathVariable Integer id) {
+		Pessoa obj = service.find(id);
+		return ResponseEntity.ok().body(obj);
+		
+	}
+	
+	@PostMapping
+	public ResponseEntity<Pessoa> criarPessoa(@RequestBody @Valid Pessoa pessoa) {
+		
+		 try {
+	            Pessoa criarPessoa = service.salvarPessoa(pessoa);
+	            return ResponseEntity.ok(criarPessoa);
+	        } catch (Exception ex) {
+	            return exception.handleGenericException(ex);
+	         
+	        }
+	       
+		
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Pessoa> alterarPessoa(@PathVariable Integer id, @Valid @RequestBody Pessoa alterarPessoa){
+		try {
+            Pessoa alteracaoPessoa = service.editarPessoa(id, alterarPessoa);
+            if (alteracaoPessoa != null) {
+                return ResponseEntity.ok(alteracaoPessoa);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception ex) {
+            return exception.handleGenericException(ex);
+        }
+    }
+	
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deletarPessoa(@PathVariable Integer id){
+		service.apagarPessoa(id);
+		return ResponseEntity.ok("Pessoa deletada com sucesso!");
+	}
+	
+	
+		
+	
+	
+	
+
+}

@@ -1,0 +1,15 @@
+package com.giovannagrangeiro.projetocp.domain;
+
+import java.util.Date;
+import java.util.List;
+
+public class Pessoa {
+	
+	private int id;
+	private String nome;
+	private String cpf;
+	private Date dataDeNascimento;
+	
+	private List<Contato> contatos = new ArrayList<>();
+
+}

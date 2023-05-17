@@ -1,0 +1,26 @@
+package com.giovannagrangeiro.projetocp;
+
+
+
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+
+
+@SpringBootApplication
+public class ProjetocpApplication  {
+	
+
+	
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProjetocpApplication.class, args);
+		 	
+
+		
+		
+		
+	}
+
+}

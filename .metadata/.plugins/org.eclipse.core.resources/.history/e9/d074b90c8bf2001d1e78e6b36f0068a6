@@ -1,0 +1,131 @@
+package com.giovannagrangeiro.projetocp.domain;
+
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import org.hibernate.validator.constraints.br.CPF;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
+
+
+
+@Entity
+public class Pessoa {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+	
+	@NotNull(message = "O campo nome é obrigatório")
+	private String nome;
+	
+	@CPF(message = "CPF inválido")
+	@NotNull(message = "O campo CPF é obrigatório")
+	private String cpf;
+	
+	@NotNull(message = "O campo data de nascimento é obrigatório")
+	@Past(message = "A data de nascimento nçao pode ser uma data futura")
+	private LocalDate dataDeNascimento;
+	
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Contato> contatos = new ArrayList<>();
+	
+	public void addContato(Contato contato) {
+		contatos.add(contato);
+		contato.setPessoa(this);
+	}
+	
+	public void removeContato (Contato contato) {
+		contatos.remove(contato);
+		contato.setPessoa(null);
+	}
+	
+	
+	public Pessoa(Integer id, String nome, String cpf, LocalDate dataDeNascimento) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+		this.dataDeNascimento = dataDeNascimento;
+		
+	}
+
+	public Pessoa() {
+		
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public LocalDate getDataDeNascimento() {
+		return dataDeNascimento;
+	}
+
+	public void setDataDeNascimento(LocalDate dataDeNascimento) {
+		this.dataDeNascimento = dataDeNascimento;
+	}
+	
+	public List<Contato> getContatos() {
+		return contatos;
+	}
+
+	public void setContatos(List<Contato> contatos) {
+		this.contatos = contatos;
+
+	
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(cpf, id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pessoa other = (Pessoa) obj;
+		return Objects.equals(cpf, other.cpf) && id == other.id;
+	
+
+	
+	}
+	
+	
+	
+
+}

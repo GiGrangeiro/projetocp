@@ -1,0 +1,19 @@
+package com.giovannagrangeiro.projetocp.resource.exception;
+
+import java.io.Serializable;
+
+public static class StandardError {
+    private HttpStatus status;
+    private String message;
+    private List<String> errors;
+
+    public StandardError(HttpStatus status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
+    public StandardError(HttpStatus status, String message, List<String> errors) {
+        this.status = status;
+        this.message = message;
+        this.errors = errors;
+    }

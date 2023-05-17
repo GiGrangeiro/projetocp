@@ -1,0 +1,11 @@
+package com.giovannagrangeiro.projetocp.config;
+
+
+@Configuration
+public class ValidationConfig {
+
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        return new LocalValidatorFactoryBean();
+    }
+}

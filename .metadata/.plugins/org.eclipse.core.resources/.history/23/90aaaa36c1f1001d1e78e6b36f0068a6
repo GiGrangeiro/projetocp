@@ -1,0 +1,5 @@
+package com.giovannagrangeiro.projetocp.repositories;
+
+public class ContatoRepository {
+
+}

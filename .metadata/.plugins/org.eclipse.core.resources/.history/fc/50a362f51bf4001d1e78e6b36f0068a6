@@ -1,0 +1,5 @@
+package com.giovannagrangeiro.projetocp.dto;
+
+public class ContatoDTO {
+
+}

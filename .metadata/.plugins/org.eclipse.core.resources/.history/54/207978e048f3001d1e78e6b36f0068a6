@@ -1,0 +1,48 @@
+package com.giovannagrangeiro.projetocp.resource.exception;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+
+
+
+public class ErrorResponse {
+	
+	
+    private HttpStatus status;
+    private String menssagem;
+    private List<String> erro;
+	
+    public ErrorResponse(HttpStatus status, String menssagem, List<String> erro) {
+		super();
+		this.status = status;
+		this.menssagem = menssagem;
+		this.erro = erro;
+	}
+    
+    public ErrorResponse(HttpStatus status, String menssagem) {
+    	this.status = status;
+    	this.menssagem = menssagem;
+    }
+    
+
+	public HttpStatus getStatus() {
+		return status;
+	}
+
+	public String getMenssagem() {
+		return menssagem;
+	}
+
+	public List<String> getErro() {
+		return erro;
+	}
+
+	
+
+
+}
+
+    
+
+	

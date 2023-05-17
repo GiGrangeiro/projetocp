@@ -1,0 +1,51 @@
+package com.giovannagrangeiro.projetocp.resource.exception;
+
+import java.util.List;
+
+
+
+public class ErrorResponse {
+	
+	
+    private String error;
+    private String message;
+    private List<String> listaMessages;
+
+    
+
+	public ErrorResponse(String error, List<String> messages) {
+		super();
+		this.error = error;
+		this.listaMessages = listaMessages;
+	}
+	
+	public ErrorResponse(String error, String message) {
+		super();
+		this.error = error;
+		this.message = message;
+	}
+	
+		public String getError() {
+		return error;
+	}
+
+	public String getMessages() {
+		return message;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	
+
+	
+
+	
+
+	
+	
+	
+    
+
+}

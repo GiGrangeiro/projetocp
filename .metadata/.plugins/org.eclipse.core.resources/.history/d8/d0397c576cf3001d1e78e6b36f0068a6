@@ -1,0 +1,117 @@
+package com.giovannagrangeiro.projetocp;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+import com.giovannagrangeiro.projetocp.repositories.PessoaRepository;
+import com.giovannagrangeiro.projetocp.services.PessoaService;
+
+@SpringBootTest
+public class PessoaTeste {
+	
+	
+	
+	@Autowired
+	private PessoaService pessoaService;
+	@MockBean
+	private PessoaRepository pessoaRepo;
+	@Autowired
+	private MockMvc mockMvc;
+	
+	@BeforeEach
+	public void configurar(){
+		MockitoAnnotations.openMocks(this);
+	}
+	
+
+	@Test
+	public void buscarPessoaPorId() throws Exception{
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(1);
+		pessoa.setNome("João");
+		pessoa.setCpf("10584310994");
+		pessoa.setDataDeNascimento(LocalDate.of(2001, 11, 2));
+		when(pessoaRepo.findById(1)).thenReturn(Optional.of(pessoa));
+		
+		Pessoa resultado =  pessoaService.find(1);
+		
+		assertEquals(1, resultado.getId());
+		assertEquals("João", resultado.getNome());
+		assertEquals("10584310994", resultado.getCpf());
+		assertEquals(LocalDate.of(2001, 11, 2), resultado.getDataDeNascimento());
+		
+	}
+	
+	@Test
+	public void criarPessoa() throws Exception{
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(1);
+		pessoa.setNome("João");
+		pessoa.setCpf("10584310994");
+		pessoa.setDataDeNascimento(LocalDate.of(2001, 11, 2));
+		when(pessoaService.salvarPessoa(any())).thenReturn(pessoa);
+		
+		MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.post("/pessoas")
+				.contentType(MediaType.APPLICATION_JSON).content("{\"nome\":\"João\",\"cpf\":\"10584310994\",\"dataDeNascimento\":\"2001-11-02\"}"))
+				.andReturn();
+		
+		assertEquals(201, resultado.getResponse().getStatus());
+		assertEquals("{\"id\":1,\"nome\":\"João\",\"cpf\":\"10584310994\",\"dataDeNascimento\":\"2001-11-02\",\"contatos\":[]}"
+		,resultado.getResponse().getContentAsString());
+				
+		
+	
+	}
+	
+	@Test
+	public void testeEditarPessoa() throws Exception {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(1);
+		pessoa.setNome("João");
+		pessoa.setCpf("10584310994");
+		pessoa.setDataDeNascimento(LocalDate.of(2001, 11, 2));
+		when(pessoaService.editarPessoa(eq(1), any())).thenReturn(pessoa);
+		
+
+		MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.put("/pessoas/1")
+				.contentType(MediaType.APPLICATION_JSON).content("{\"nome\":\"João\",\"cpf\":\"10584310994\",\"dataDeNascimento\":\"2001-11-02\"}"))
+				.andReturn();
+		
+	    assertEquals(200, resultado.getResponse().getStatus());
+	    assertEquals("{\"id\":1,\"nome\":\"João\",\"cpf\":\"10584310994\",\"dataDeNascimento\":\"2001-11-02\",\"contatos\":[]}"
+	    		, resultado.getResponse().getContentAsString());
+		
+		
+		
+	}
+	
+	@Test
+	public void testeApagarPessoa() throws Exception {
+		MvcResult resultado = mockMvc.perform(MockMvcRequestBuilders.delete("/pessoas/1"))
+				.andReturn();
+		
+		assertEquals(204, resultado.getResponse().getStatus());
+	}
+	
+	
+
+}

@@ -1,0 +1,5 @@
+package com.giovannagrangeiro.projetocp.config;
+
+public class ValidationConfig {
+
+}

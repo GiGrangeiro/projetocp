@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="PessoaResourceTeste" project="projetocp" tests="4" started="4" failures="0" errors="0" ignored="0">
+  <testsuite name="com.giovannagrangeiro.projetocp.PessoaResourceTeste" time="0.485" displayname="PessoaResourceTeste" uniqueid="[engine:junit-jupiter]/[class:com.giovannagrangeiro.projetocp.PessoaResourceTeste]">
+    <testcase name="criarPessoa" classname="com.giovannagrangeiro.projetocp.PessoaResourceTeste" time="0.375" displayname="criarPessoa()" uniqueid="[engine:junit-jupiter]/[class:com.giovannagrangeiro.projetocp.PessoaResourceTeste]/[method:criarPessoa()]"/>
+    <testcase name="testeBuscarPessoas" classname="com.giovannagrangeiro.projetocp.PessoaResourceTeste" time="0.029" displayname="testeBuscarPessoas()" uniqueid="[engine:junit-jupiter]/[class:com.giovannagrangeiro.projetocp.PessoaResourceTeste]/[method:testeBuscarPessoas()]"/>
+    <testcase name="testeApagarPessoa" classname="com.giovannagrangeiro.projetocp.PessoaResourceTeste" time="0.04" displayname="testeApagarPessoa()" uniqueid="[engine:junit-jupiter]/[class:com.giovannagrangeiro.projetocp.PessoaResourceTeste]/[method:testeApagarPessoa()]"/>
+    <testcase name="testeEditarPessoa" classname="com.giovannagrangeiro.projetocp.PessoaResourceTeste" time="0.034" displayname="testeEditarPessoa()" uniqueid="[engine:junit-jupiter]/[class:com.giovannagrangeiro.projetocp.PessoaResourceTeste]/[method:testeEditarPessoa()]"/>
+  </testsuite>
+</testrun>

@@ -1,0 +1,5 @@
+package com.giovannagrangeiro.projetocp.domain;
+
+public class Pessoa {
+
+}

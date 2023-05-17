@@ -1,0 +1,93 @@
+package com.giovannagrangeiro.projetocp;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDate;
+import java.util.Optional;
+
+import javax.security.auth.login.AccountNotFoundException;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+import com.giovannagrangeiro.projetocp.repositories.PessoaRepository;
+import com.giovannagrangeiro.projetocp.services.PessoaService;
+
+@SpringBootTest
+public class PessoaTeste {
+	
+	@Mock
+	private PessoaRepository pessoarepo;
+	@InjectMocks
+	private PessoaService pessoaService;
+	
+	@BeforeEach
+	public void configurar(){
+		MockitoAnnotations.openMocks(this);
+	}
+	
+
+	@Test
+	public void buscarPessoaPorId() {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(1);
+		pessoa.setNome("João");
+		pessoa.setCpf("10584310994");
+		pessoa.setDataDeNascimento(LocalDate.of(2001, 11, 2));
+		when(pessoarepo.findById(1)).thenReturn(Optional.of(pessoa));
+		
+		Pessoa resultado =  pessoaService.find(1);
+		
+		assertEquals(null, resultado.getId());
+		assertEquals("João", resultado.getNome());
+		assertEquals("10584310994", resultado.getCpf());
+		assertEquals(LocalDate.of(2001, 11, 2), resultado.getDataDeNascimento());
+		
+	}
+	
+	@Test
+	public void criarPessoa() {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(1);
+		pessoa.setNome("João");
+		pessoa.setCpf("10584310994");
+		pessoa.setDataDeNascimento(LocalDate.of(2001, 11, 2));
+		when(pessoaService.salvarPessoa(any())).thenReturn(pessoa);
+		
+		MvcResult resultado = MockMvc.perform(MockMvcRequestBuilders.post("/pessoas")
+				.contentType(MediaType.APPLICATION_JSON).content("{\"nome\":\"João\",\"cpf\":\"10584310994\",\"dataDeNascimento\":\"2001-11-02\"}"))
+				.andReturn()
+				
+		
+	
+	}
+	
+	@Test
+	public void testeCriarPessoaSemCpf() {
+		assertThrows(IllegalArgumentException.class, () -> {
+			new Pessoa(null,"João", null, LocalDate.of(2001, 11, 2));
+		});
+	}
+	
+	@Test
+	public void testeCriarPessoaSemNome() {
+		assertThrows(IllegalArgumentException.class, () -> {
+			new Pessoa(null, null, "10584310994", LocalDate.of(2001, 11, 2));
+		});
+	}
+	
+	public void testeCriar
+
+}

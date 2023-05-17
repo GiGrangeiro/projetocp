@@ -1,0 +1,23 @@
+package com.giovannagrangeiro.projetocp;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.giovannagrangeiro.projetocp.domain.Pessoa;
+
+@SpringBootApplication
+public class ProjetocpApplication implements CommandLineRunner {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProjetocpApplication.class, args);
+		 	
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		Pessoa p1 = new Pessoa(null, "12355546899", "11/05/2001", "Ana");
+		
+	}
+
+}
